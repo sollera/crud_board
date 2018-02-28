@@ -48,7 +48,8 @@ today = yyyy+'-'+mm+'-'+dd;
 					<td>
 					<c:forEach begin="2" end="${list.textlvl}">&nbsp;&nbsp; </c:forEach>
 					<c:if test="${list.textlvl >= 1}">ㄴ</c:if>
-					<a href="/crud/postView/viewNo=${list.viewNo}">${list.title}</a></td>
+					<a href="/crud/postView/viewNo=${list.viewNo}">${list.title}</a>
+					<c:if test="${list.rCnt > 1}">&#40;${list.rCnt-1}&#41;</c:if></td>
 					<td style="text-align:center;">${list.writer}</td>
 					<td style="text-align:center;"><input type="text" id="wDate${list.viewNo}" value="${list.enroll_dt}" style="border:none; width:100px; text-align:center;" readonly ></td>
 					<td style="text-align:center;">${list.viewcnt}</td>

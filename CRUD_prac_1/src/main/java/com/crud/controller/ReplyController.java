@@ -52,4 +52,10 @@ public class ReplyController {
     	replyDao.updateStep(step);
     	replyDao.create(vo);
     }
+    
+    // 댓글 삭제
+    @RequestMapping("/delete.do/{vno}")
+	public void delete(@PathVariable String vno){
+    	
+	}
 }

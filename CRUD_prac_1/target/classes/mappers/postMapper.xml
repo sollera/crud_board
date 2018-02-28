@@ -17,7 +17,7 @@
 	
 	<!-- 글 목록 조회 -->
 	<select id="selectList" resultType="postVO" parameterType="java.lang.Integer">
-		SELECT * FROM spring_nBoard WHERE textlvl=0 ORDER BY ref desc LIMIT #{firstPost},10;
+		SELECT a.viewNo,a.title,a.viewcnt,a.enroll_dt,a.ref,a.textlvl,a.step,a.parentsno,a.content,a.writer,(select count(b.viewNo) FROM spring_nBoard b WHERE b.ref=a.ref) rCnt FROM spring_nBoard a WHERE textlvl=0 ORDER BY ref desc LIMIT #{firstPost},10;
 	</select>
 	
 	<!-- 전체 글 개수 -->

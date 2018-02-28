@@ -7,6 +7,7 @@ public class PostVO {
 	private String writer;
 	private String enroll_dt;
 	private int viewcnt;
+	private int rCnt;
 	
 	private int viewNo;
 	private int ref;
@@ -74,6 +75,12 @@ public class PostVO {
 	}
 	public void setParentsno(int parentsno) {
 		this.parentsno = parentsno;
+	}
+	public int getrCnt() {
+		return rCnt;
+	}
+	public void setrCnt(int rCnt) {
+		this.rCnt = rCnt;
 	}
 	
 
