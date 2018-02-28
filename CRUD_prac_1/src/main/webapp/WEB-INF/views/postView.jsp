@@ -26,9 +26,9 @@ function listReply(){
 	   url: "/crud/listJson.do/"+vno,
 	   success: function(result){
 	       console.log(result);
-	       var output = "<table border='0' width='1000px' align='center' style='background:#F6F6F6;border-bottom:solid 1px;'>";
+	       var output = "<table border='0' width='1000px' align='center' style='background:#F6F6F6;border-bottom:solid 1px #D2D2D2;'>";
 	       for(var i in result){
-	           output += "<tr style='border-top:solid 1px;'>";
+	           output += "<tr style='border-top:solid 1px #D2D2D2;'>";
 	           if(result[i].textlvl == 1) output += "<td colspan='6' width='8%'>";
 	           else if(result[i].textlvl == 2) output += "<td width='2%' align='right' valign='top'>ㄴ</td><td colspan='5' width='8%'>";
 	           else if(result[i].textlvl == 3) output += "<td colspan='2' width='4%' align='right' valign='top'>ㄴ</td><td colspan='4' width='8%'>";
@@ -36,7 +36,7 @@ function listReply(){
 	           else if(result[i].textlvl == 5) output += "<td colspan='4' width='8%' align='right' valign='top'>ㄴ</td><td colspan='2' width='8%'>";
 	           else if(result[i].textlvl >= 6) output += "<td colspan='5' width='10%' align='right' valign='top'>ㄴ</td><td width='8%'>";
 	           output += result[i].writer+"</td>";
-	           output += "<td style='border-left:solid 1px;padding-left:1px;'>"+result[i].content+"</td>";
+	           output += "<td style='border-left:solid 1px #E4E4E4;padding-left:1px;'>"+result[i].content+"</td>";
 	           output += "<td width='3%' align='center' onclick='fn_btnReply("+i+")'>re</td>";
 	           output += "</tr>";
 	           output += "<tr style='border:0px;'><td colspan='8' width='100%' align='center'>"+fn_inputF(i)+"</td></tr>";
