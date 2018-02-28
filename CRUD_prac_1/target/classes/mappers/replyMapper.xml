@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="com.kopoctc.mapper.replyMapper">
+    
+    <!-- 댓글 목록 -->
+    <select id="listReply" resultType="com.crud.dto.ReplyVO" parameterType="java.lang.Integer">
+        SELECT * FROM spring_nBoard WHERE ref=(SELECT ref FROM spring_nBoard WHERE viewno=#{viewno}) and textlvl >= 1 ORDER BY step asc;
+    </select>
+    
+    <!-- 댓글 개수 -->
+    <select id="replyCnt" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    	SELECT count(viewNo) FROM spring_nBoard WHERE ref=(SELECT ref FROM spring_nBoard WHERE viewno=#{viewno});
+    </select>
+    
+    <!-- 댓글 등록 -->
+	<insert id="insertReply" parameterType="postVO">
+		INSERT INTO spring_nBoard(title,ref,textlvl,step,parentsno,content,writer,enroll_dt) VALUES (#{title},#{ref},#{textlvl},#{step},#{parentsno},#{content},#{writer},now());
+	</insert>
+	<update id="updateForReply" parameterType="java.lang.Integer">
+		UPDATE spring_nBoard SET step=step+1 WHERE step>=#{step};
+	</update>
+	
+</mapper>
