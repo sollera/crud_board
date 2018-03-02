@@ -18,7 +18,7 @@ function deletePost(no){
 }
 
 //RestController방식 (Json)
-//**댓글 목록2 (json)
+//**댓글 목록 (json)
 function listReply(){
 	$.ajax({
 	   type: "get",
@@ -29,20 +29,24 @@ function listReply(){
 	       var output = "<table border='0' width='1000px' align='center' style='background:#F6F6F6;border-bottom:solid 1px #D2D2D2;'>";
 	       for(var i in result){
 	           output += "<tr style='border-top:solid 1px #D2D2D2;'>";
+	           //댓글 수준 구분
 	           if(result[i].textlvl == 1) output += "<td colspan='6' width='97%' valign='top'>";
 	           else if(result[i].textlvl == 2) output += "<td width='2%' align='right' valign='top'></td><td colspan='5' width='98%' valign='top'>";
 	           else if(result[i].textlvl == 3) output += "<td colspan='2' width='4%' align='right' valign='top'></td><td colspan='4' width='96%' valign='top'>";
 	           else if(result[i].textlvl == 4) output += "<td colspan='3' width='6%' align='right' valign='top'></td><td colspan='3' width='94%' valign='top'>";
 	           else if(result[i].textlvl == 5) output += "<td colspan='4' width='8%' align='right' valign='top'></td><td colspan='2' width='92%' valign='top'>";
 	           else if(result[i].textlvl >= 6) output += "<td colspan='5' width='10%' align='right' valign='top'></td><td width='90%' valign='top'>";
+	           //댓글 작성자 & 작성시간
 	           var dt = result[i].enroll_dt;
 	           output += "<strong>"+result[i].writer+"</strong>&nbsp; &nbsp;<font size='1'>"+result[i].enroll_dt+"</font>&nbsp; &nbsp;";
 	           output += "<img src='https://github.com/sollera/crud_board/blob/master/img/reply.gif?raw=true' onclick='fn_btnReply("+i+")' style='width:10px; height:10px;'>&nbsp;";
 	           output += "<img src='https://github.com/sollera/crud_board/blob/master/img/change.png?raw=true' onclick='fn_btnMod("+i+")' style='width:10px; height:10px;'>&nbsp;";
 	           output += "<img src='https://github.com/sollera/crud_board/blob/master/img/del.png?raw=true' onclick='fn_btnDel("+i+")' style='width:10px; height:10px;'>&nbsp;";
+	           //삭제 확인 폼
 	           output += fn_DelF(i,result[i].viewNo,result[i].title);
 	           output += "<br />";
-	           output += result[i].content+"</td>";
+	           //댓글 내용 & 수정 폼
+	           output += fn_ModF(i,result[i].content,result[i].viewNo,result[i].title)+"</td>";
 	           output += "</tr>";
 	           output += "<tr style='border:0px;'><td colspan='7' width='100%' align='center'>"+fn_inputF(i,result[i].ref,result[i].textlvl,result[i].step,result[i].viewNo)+"</td></tr>";
 	       }
@@ -73,7 +77,23 @@ function fn_btnReply(pos){
 	}
 }
 
-//댓글 입력 창
+//메인 댓글 입력창
+function addReply(refmm,textlvlmm,stepmm,parentsnomm){
+	var rep = "";
+	rep += "<table id='tb_replyMain' align='center' border='0'>";
+	rep += "<tr><td>";
+	rep += "<input type='text' id='writerM' placeholder='작성자'>&nbsp; &nbsp;<input type='password' id='titleM' placeholder='비밀번호'>";
+	rep += "<input type='button' value='등록' onclick='fn_saveReply(&#39;Main&#39;)'><br />";
+	rep += "<textarea rows='3' cols='138' id='contentM' placeholder='내용' style='margin-top:2px;resize:none;'></textarea>";
+	rep += "<input type='hidden' id='refM' value='"+refmm+"'>";
+	rep += "<input type='hidden' id='textlvlM' value='"+(textlvlmm+1)+"'>";
+	rep += "<input type='hidden' id='stepM' value='"+(stepmm+1)+"'>";
+	rep += "<input type='hidden' id='parentsnoM' value='"+parentsnomm+"'>";
+	rep += "</td></tr>";
+	rep += "</table>";
+	$("#replyInputFormAdd").html(rep);
+}
+//대댓글 입력 창
 function fn_inputF(i,refA,textlvlA,stepA,viewNoA){
 	var tb_inputF = "<table id='tb_reply"+i+"' align='center' border='0' style='display:none;'>"
 						+"<tr><td>"
@@ -101,7 +121,7 @@ function fn_saveReply(i){
 		refS = $("#refM").val();
 		textlvlS = $("#textlvlM").val();
 		stepS = $("#stepM").val();
-		viewNoS = $("#parentsnoM").val();
+		parentsnoS = $("#parentsnoM").val();
 	}else{
 		title = $("#title"+i).val();
 		writer = $("#writer"+i).val();
@@ -109,9 +129,9 @@ function fn_saveReply(i){
 		refS = $("#ref"+i).val();
 		textlvlS = $("#textlvl"+i).val();
 		stepS = $("#step"+i).val();
-		viewNoS = $("#parentsno"+i).val();
+		parentsnoS = $("#parentsno"+i).val();
 	}
-	var param = "title="+title+"&writer="+writer+"&content="+content+"&ref="+refS+"&textlvl="+textlvlS+"&step="+stepS+"&viewNo="+viewNoS;
+	var param = "title="+title+"&writer="+writer+"&content="+content+"&ref="+refS+"&textlvl="+textlvlS+"&step="+stepS+"&parentsno="+parentsnoS;
 	$.ajax({                
         type: "post",
         url: "/crud/insert.do",
@@ -119,6 +139,7 @@ function fn_saveReply(i){
         success: function(){
             alert("댓글이 등록되었습니다.");
             listReply();
+            addReply(refO,textlvlO,stepO,parentsnoO);
             //댓글 입력창 호출 & value clear
         },
         error: function() {
@@ -127,8 +148,60 @@ function fn_saveReply(i){
     });
 }
 
-function fn_btnMod(i){
-	
+//댓글 수정 호출
+function fn_btnMod(pos){
+	var i = 0;
+	for(i;i<9999;i++){
+		var obj_tdA = document.getElementById("tdA"+i);
+		var obj_tdB = document.getElementById("tdB"+i);
+		if(obj_tdA == null) break;
+		if(i == pos){
+			if(obj_tdA.style.display==''){
+				obj_tdA.style.display='none';
+				obj_tdB.style.display='';
+			}else{
+				obj_tdA.style.display='';
+				obj_tdB.style.display='none';
+			}
+		}else{
+			obj_tdA.style.display='';
+			obj_tdB.style.display='none';
+		}
+	}
+}
+//댓글 수정 폼
+function fn_ModF(i,content,vno,pw){
+	var tb_modF = "<table border='0'><tr><td id='tdA"+i+"'>"+content+"</td>"
+			    +"<td id='tdB"+i+"' style='display:none;'>"
+			    +"<input type='password' id='mod_pw"+i+"' placeholder='password' style='width:70px;height:20px;vertical-align:middle;'>&nbsp;"
+			    +"<input type='button' value='수정' style='padding:0;text-size:12px;height:20px;vertical-align:middle;' onclick='fn_Mod("+i+","+vno+",&#39;"+pw+"&#39;)'>"
+			    +"<textarea rows='3' cols='138' id='mod_Content"+i+"' placeholder='내용' style='margin-top:2px;resize:none;'>"+content+"</textarea>"
+			    +"</td></tr></table>";
+	return tb_modF;
+}
+//댓글 수정 처리
+function fn_Mod(i,vno,pw){
+	var objPW = document.getElementById("mod_pw"+i);
+	if(pw == objPW.value){
+		var objContent = document.getElementById("mod_Content"+i).value;
+		var param = "viewNo="+vno+"&content="+objContent;
+		$.ajax({
+	        type: "post",
+	        url: "/crud/update.do",
+	        data: param,
+	        success: function(){
+	            alert("댓글을 수정했습니다.");
+	            listReply();
+	        },
+	        error: function() {
+	            alert("댓글 수정 실패");
+	            fn_btnMod(i);
+	        }
+	    });
+	}else{
+		alert("비밀번호가 틀렸습니다.");
+	}
+	document.getElementById("mod_pw"+i).value = "";
 }
 
 //댓글 삭제 확인 폼 호출
@@ -180,6 +253,8 @@ function fn_Del(i,vno,pw){
 	            alert("댓글 삭제 실패");
 	        }
 	    });
+	}else{
+		alert("비밀번호가 틀렸습니다.");
 	}
 }
 </script>
@@ -213,22 +288,11 @@ function fn_Del(i,vno,pw){
 <!-- **댓글 목록 출력할 위치 -->
 <br />
 <div id="listReply"></div>
+<br>
+<div id="replyInputFormAdd"></div>
 <script>
 listReply();
+addReply(refO,textlvlO,stepO,parentsnoO);
 </script>
-<br>
-<table id='tb_replyMain' align='center' border='0'>
-	<tr><td>
-		<input type='text' id='writerM' placeholder='작성자'>&nbsp; &nbsp;<input type='password' id='titleM' placeholder='비밀번호'>
-		<input type='button' value='등록' onclick='fn_saveReply("Main")'><br />
-		<textarea rows='3' cols='138' id='contentM' placeholder='내용' style='margin-top:2px;resize:none;'></textarea>
-		<script>
-			document.write("<input type='hidden' id='refM' value='"+refO+"'>");
-			document.write("<input type='hidden' id='textlvlM' value='"+(textlvlO+1)+"'>");
-			document.write("<input type='hidden' id='stepM' value='"+(stepO+1)+"'>");
-			document.write("<input type='hidden' id='parentsnoM' value='"+parentsnoO+"'>");
-		</script>
-	</td></tr>
-</table>
 </body>
 </html>

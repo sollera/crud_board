@@ -6,6 +6,7 @@
 	
 		<typeAliases>
 			<typeAlias type="com.crud.dto.PostVO" alias="postVO"/>
+			<typeAlias type="com.crud.dto.ReplyVO" alias="replyVO"/>
 		</typeAliases>
 		
 	</configuration>

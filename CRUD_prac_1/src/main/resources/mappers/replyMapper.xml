@@ -17,11 +17,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <!-- 댓글 등록 -->
-	<insert id="insertReply" parameterType="postVO">
+	<insert id="insertReply" parameterType="replyVO">
 		INSERT INTO spring_nBoard(title,ref,textlvl,step,parentsno,content,writer,enroll_dt) VALUES (#{title},#{ref},#{textlvl},#{step},#{parentsno},#{content},#{writer},now());
 	</insert>
 	<update id="updateForReply" parameterType="java.lang.Integer">
 		UPDATE spring_nBoard SET step=step+1 WHERE step>=#{step};
 	</update>
 	
+	<!-- 수정 -->
+	<update id="updatePost" parameterType="replyVO">
+		UPDATE spring_nBoard SET content=#{content} WHERE viewNo=#{viewNo};
+	</update>
+
 </mapper>

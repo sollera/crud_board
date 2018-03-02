@@ -3,7 +3,6 @@ package com.crud.controller;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.crud.dao.PostDAO;
 import com.crud.dao.ReplyDAO;
 import com.crud.dto.ReplyVO;
 
@@ -27,6 +27,8 @@ public class ReplyController {
 	 
 	 @Inject
 	 ReplyDAO replyDao;
+	 @Inject
+	 PostDAO pDao;
 	 	 
 	 // 댓글 목록(@RestController Json방식으로 처리 : 데이터를 리턴)
 	 @RequestMapping("/listJson.do/{vno}")
@@ -56,6 +58,14 @@ public class ReplyController {
     // 댓글 삭제
     @RequestMapping("/delete.do/{vno}")
 	public void delete(@PathVariable String vno){
-    	
+    	int viewno = Integer.parseInt(vno);
+    	if(pDao.selectRangeForDel(viewno) == -1) pDao.deletePost(viewno); 	//해당 글 이하에 같은 글수준의 글이 없다면 해당글 이하 전부 삭제
+		else pDao.deletePostLimit(viewno, pDao.selectRangeForDel(viewno));	//같은 글수준이 있다면 그 전까지만 삭제
+	}
+    
+    // 댓글 수정
+    @RequestMapping("/update.do")
+    public void update(@ModelAttribute ReplyVO vo){
+    	replyDao.update(vo);
 	}
 }

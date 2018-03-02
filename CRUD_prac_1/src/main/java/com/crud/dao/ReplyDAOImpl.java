@@ -1,5 +1,6 @@
 package com.crud.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,14 +39,12 @@ public class ReplyDAOImpl implements ReplyDAO {
     // 댓글 수정
     @Override
     public void update(ReplyVO vo) {
-        // TODO Auto-generated method stub
- 
+    	sqlSession.update(Namespace+".updatePost",vo);
     }
     // 댓글 삭제
     @Override
-    public void delete(Integer rno) {
-        // TODO Auto-generated method stub
- 
+    public void delete(int viewno) {
+        
     }
  
 }
