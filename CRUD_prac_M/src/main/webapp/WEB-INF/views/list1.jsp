@@ -48,10 +48,15 @@
 	
 	<ons-page>
 		<ons-toolbar>
+			<div class="left">
+				<ons-toolbar-button>
+		  			<ons-icon icon="md-home" onclick="location.href='/crud/list/1'"></ons-icon>
+		  		</ons-toolbar-button>
+			</div>
 		  	<div class="center">Free Board</div>
 		  	<div class="right">
 		  		<ons-toolbar-button>
-		  			<ons-icon icon="ion-compose,material:" onclick="location.href='/crud/write'"></ons-icon>
+		  			<ons-icon icon="ion-compose" onclick="location.href='/crud/write'"></ons-icon>
 		  		</ons-toolbar-button>
 		  	</div>
 		</ons-toolbar>
@@ -86,7 +91,7 @@
 		<ons-bottom-toolbar>
 	  		<!-- 페이징 처리 -->
 	<div align="center">
-		<ul class="pagination">
+		<ul class="pagination" style="margin:5px;">
 			<c:choose>
 				<c:when test="${firstP >= 6}">	<!-- 이전 페이징 존재 -->
 					<li class="page-item"><a class="page-link" href="/crud/list/${firstP-5}">&laquo;</a></li>

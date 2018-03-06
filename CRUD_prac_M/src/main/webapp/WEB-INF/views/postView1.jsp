@@ -299,6 +299,11 @@ function fn_Del(i,vno,pw){
 	
 	<ons-page>
 		<ons-toolbar>
+			<div class="left">
+				<ons-toolbar-button>
+		  			<ons-icon icon="md-home" onclick="location.href='/crud/list/1'"></ons-icon>
+		  		</ons-toolbar-button>
+			</div>
 		  	<div class="center">Free Board</div>
 		  	<div class="right">
 		  		<ons-toolbar-button>
@@ -306,10 +311,6 @@ function fn_Del(i,vno,pw){
 		  		</ons-toolbar-button>
 		  	</div>
 		</ons-toolbar>
-				
-		<ons-pull-hook id="pull-hook">
-		  Pull to refresh
-		</ons-pull-hook>
 		
 		<c:forEach items="${postView}" var="view">
 		<ons-card>
@@ -318,7 +319,11 @@ function fn_Del(i,vno,pw){
 				<ons-list>
 					<ons-list-header>
 					<ons-row>
-						<ons-col>글쓴이 : ${view.writer}</ons-col><ons-col>조회수 : ${view.viewcnt}</ons-col><ons-col align="right"><button type="button">수정</button></ons-col>
+						<ons-col>글쓴이 : ${view.writer}</ons-col><ons-col>조회수 : ${view.viewcnt}</ons-col>
+						<ons-col align="right">
+							<button type="button" onclick="location.href='/crud/update/viewNo=${view.viewNo}'">수정</button>&nbsp;
+							<button type="button" onclick="deletePost(${view.viewNo})">삭제</button>
+						</ons-col>
 					</ons-row>
 					<ons-row><ons-col>등록일 : ${view.enroll_dt}</ons-col></ons-row>
 					</ons-list-header>

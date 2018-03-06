@@ -83,7 +83,7 @@ public class HomeController {
 		model.addAttribute("step", 0);
 		model.addAttribute("parentsno", 0);
 		
-		return "write";	//글 쓰기 입력폼 페이지
+		return "write1";	//글 쓰기 입력폼 페이지
 	}
 	
 	//DB에 글 저장
@@ -105,7 +105,7 @@ public class HomeController {
 		List<PostVO> updatePrepare = dao.selectView(Integer.parseInt(viewNo));	//select 쿼리 결과를 List에 받음
 		model.addAttribute("updateView", updatePrepare);	//데이터를 model을 통해 전달
 		
-		return "update";
+		return "update1";
 	}
 	
 	//수정 반영
